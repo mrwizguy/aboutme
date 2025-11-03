@@ -534,8 +534,18 @@
         const durationDisplay = document.getElementById('duration');
 
         const songFiles = [
+            'Avenged Sevenfold - Almost Easy (Audio).mp3',
+            'Avenged Sevenfold- This Means War.mp3',
             'Chris Travis - Bring It Back.mp3',
+            'Chris Travis - FijiFalls.mp3',
             'Chris Travis - H20.mp3',
+            'Chris Travis - Hallucinate Dreaming [Prod. By Eric Dingus].mp3',
+            'Chris Travis - In My Zone Prod Gotthem.mp3',
+            'Chris Travis - Where My Money.mp3',
+            'Slipknot - Psychosocial (Remastered Audio).mp3',
+            'Slipknot - The Devil In I (Audio).mp3',
+            'Slipknot - Yen.mp3',
+            'Welcome to the Family.mp3',
             'Xavier Wulf - Smoke (Kemuri) (Legendado).mp3'
         ];
 
@@ -687,9 +697,11 @@
             currentSongIndex = (currentSongIndex + 1) % songs.length;
             loadSong(currentSongIndex);
             if (isPlaying) {
-                audioPlayer.play().catch(e => {
-                    console.error('Error playing audio:', e);
-                });
+                setTimeout(() => {
+                    audioPlayer.play().catch(e => {
+                        console.error('Error playing audio:', e);
+                    });
+                }, 100);
             }
         });
 
