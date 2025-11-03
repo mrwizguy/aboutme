@@ -551,7 +551,7 @@
 
             for (const file of songFiles) {
                 try {
-                    const path = `/songs/${file}`;
+                    const path = `songs/${file}`;
                     const response = await fetch(path, { method: 'HEAD' });
                     if (response.ok) {
                         const fileName = file.replace(/\.(mp3|wav|ogg|m4a|flac)$/i, '');
