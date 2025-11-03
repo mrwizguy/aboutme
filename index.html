@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wizguyy – developer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        @keyframes lightning {
+            0%, 10%, 20%, 100% {
+                background: transparent;
+            }
+            5%, 15% {
+                background: rgba(255, 0, 0, 0.1);
+            }
+        }
+
+        .video-overlay.lightning-flash {
+            animation: lightning 0.5s ease-in-out;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .profile-card {
+            background: rgba(20, 20, 20, 0.9);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 60px;
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .profile-left {
+            flex-shrink: 0;
+        }
+
+        .profile-image {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 3px solid #ff0000;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        }
+
+        .profile-right {
+            flex: 1;
+        }
+
+        .profile-card h1 {
+            font-size: 2em;
+            margin-bottom: 5px;
+            color: #ff0000;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+        .profile-card p {
+            font-size: 1em;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        .languages {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .language-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .language-item:hover {
+            transform: translateX(5px);
+        }
+
+        .language-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: none;
+            padding: 8px;
+            background: rgba(255, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .language-item:hover .language-icon {
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+        }
+
+        .language-name {
+            color: #ff0000;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .projects-section {
+            margin-top: 60px;
+        }
+
+        .projects-section h2 {
+            text-align: center;
+            font-size: 2em;
+            color: #fff;
+            margin-bottom: 40px;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            background: rgba(20, 20, 20, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            text-decoration: none;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+        }
+
+        .project-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .project-info {
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0;
+        }
+
+        .project-info h3 {
+            color: #fff;
+            font-size: 1.5em;
+        }
+
+        .project-info p {
+            color: #fff;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .music-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #ff0000;
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .music-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.8);
+        }
+
+        .music-player {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 380px;
+            background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 
+                -8px 8px 16px rgba(255, 0, 0, 0.1),
+                8px -8px 16px rgba(0, 0, 0, 0.5),
+                inset 2px -2px 8px rgba(255, 0, 0, 0.05);
+            z-index: 999;
+            display: none;
+        }
+
+        .music-player.active {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .music-player h3 {
+            color: #ff0000;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        .now-playing {
+            color: #ccc;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            min-height: 20px;
+        }
+
+        .media-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .media-button {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            transition: transform 0.2s ease;
+        }
+
+        .media-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .button-icon {
+            background: linear-gradient(145deg, rgba(255, 0, 0, 0.3), rgba(255, 0, 0, 0.1));
+            border-radius: 50%;
+            color: #ff6666;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                -4px 4px 8px rgba(0, 0, 0, 0.3),
+                4px -4px 8px rgba(255, 0, 0, 0.05);
+            transition: all 0.2s ease;
+        }
+
+        .media-button:hover .button-icon {
+            box-shadow: 
+                -6px 6px 12px rgba(0, 0, 0, 0.4),
+                6px -6px 12px rgba(255, 0, 0, 0.1);
+        }
+
+        .play-button .button-icon {
+            background: linear-gradient(145deg, rgba(255, 0, 0, 0.4), rgba(255, 0, 0, 0.2));
+            width: 60px;
+            height: 60px;
+            color: #ff0000;
+            box-shadow: 
+                -6px 6px 12px rgba(0, 0, 0, 0.4),
+                6px -6px 12px rgba(255, 0, 0, 0.1),
+                inset -2px 2px 4px rgba(0, 0, 0, 0.2),
+                inset 2px -2px 4px rgba(255, 0, 0, 0.1);
+        }
+
+        .play-button .button-icon i {
+            font-size: 1.3em;
+        }
+
+        .button-icon i {
+            font-size: 1em;
+        }
+
+        .progress-wrapper {
+            margin-bottom: 15px;
+        }
+
+        .progress-bar-container {
+            background: linear-gradient(145deg, #0a0a0a, #1a1a1a);
+            border-radius: 10px;
+            height: 8px;
+            margin-bottom: 10px;
+            position: relative;
+            box-shadow: 
+                inset -2px 2px 4px rgba(0, 0, 0, 0.5),
+                inset 2px -2px 4px rgba(255, 0, 0, 0.05);
+            cursor: pointer;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #ff0000, #ff6666);
+            border-radius: 10px;
+            height: 100%;
+            width: 0%;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+        .progress-time {
+            display: flex;
+            justify-content: space-between;
+            color: #999;
+            font-size: 0.75em;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ff0000;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #cc0000;
+        }
+    </style>
+    </head>
+<body>
+    <video class="video-background" autoplay muted loop playsinline>
+        <source src="background.mp4" type="video/mp4">
+    </video>
+    <div class="video-overlay" id="videoOverlay"></div>
+
+    <div class="container">
+        <div class="profile-card">
+            <div class="profile-left">
+                <img src="wizguy.png" alt="wizguyy" class="profile-image" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22150%22 height=%22150%22%3E%3Crect fill=%22%23ff0000%22 width=%22150%22 height=%22150%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2260%22 fill=%22%23fff%22 text-anchor=%22middle%22 dy=%22.3em%22%3EW%3C/text%3E%3C/svg%3E'">
+            </div>
+            <div class="profile-right">
+                <h1>wizguyy</h1>
+                <p>developer</p>
+                
+                <div class="languages">
+                    <div class="language-item">
+                        <img src="python.png" alt="Python" class="language-icon" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22%3E%3Crect fill=%22%23306998%22 width=%2260%22 height=%2260%22 rx=%225%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2230%22 fill=%22%23fff%22 text-anchor=%22middle%22 dy=%22.3em%22%3EPy%3C/text%3E%3C/svg%3E'">
+                        <span class="language-name">Python</span>
+                    </div>
+                    <div class="language-item">
+                        <img src="javascript.png" alt="JavaScript" class="language-icon" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22%3E%3Crect fill=%22%23f7df1e%22 width=%2260%22 height=%2260%22 rx=%225%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2230%22 fill=%22%23000%22 text-anchor=%22middle%22 dy=%22.3em%22%3EJS%3C/text%3E%3C/svg%3E'">
+                        <span class="language-name">JavaScript</span>
+                    </div>
+                    <div class="language-item">
+                        <img src="lua.png" alt="Lua" class="language-icon" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22%3E%3Crect fill=%22%23000080%22 width=%2260%22 height=%2260%22 rx=%225%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2224%22 fill=%22%23fff%22 text-anchor=%22middle%22 dy=%22.3em%22%3ELua%3C/text%3E%3C/svg%3E'">
+                        <span class="language-name">Lua</span>
+                    </div>
+                    <div class="language-item">
+                        <img src="java.png" alt="Java" class="language-icon" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22%3E%3Crect fill=%22%23007396%22 width=%2260%22 height=%2260%22 rx=%225%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2224%22 fill=%22%23fff%22 text-anchor=%22middle%22 dy=%22.3em%22%3EJava%3C/text%3E%3C/svg%3E'">
+                        <span class="language-name">Java</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="projects-section">
+            <h2>Projects</h2>
+            <div class="projects-grid">
+                <a href="https://shield-bot-dashboard.onrender.com/" class="project-card">
+                    <img src="shieldbot.png" alt="ShieldBot" class="project-image" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2280%22 height=%2280%22%3E%3Ccircle fill=%22%23ff0000%22 cx=%2240%22 cy=%2240%22 r=%2240%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2230%22 fill=%22%23fff%22 text-anchor=%22middle%22 dy=%22.3em%22%3ES%3C/text%3E%3C/svg%3E'">
+                    <div class="project-info">
+                        <h3>ShieldBot</h3>
+                    </div>
+                </a>
+                <a href="https://teamproducts.uk/" class="project-card">
+                    <img src="teamsign.png" alt="TeamSign" class="project-image" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2280%22 height=%2280%22%3E%3Ccircle fill=%22%23ff0000%22 cx=%2240%22 cy=%2240%22 r=%2240%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2230%22 fill=%22%23fff%22 text-anchor=%22middle%22 dy=%22.3em%22%3ET%3C/text%3E%3C/svg%3E'">
+                    <div class="project-info">
+                        <h3>TeamSign</h3>
+                        <p>2700+ Servers</p>
+                    </div>
+                </a>
+                <a href="https://discord.com/oauth2/authorize?client_id=963486304220377181&permissions=8&integration_type=0&scope=bot+applications.commands" class="project-card">
+                    <img src="teamchat.png" alt="TeamChat" class="project-image" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2280%22 height=%2280%22%3E%3Ccircle fill=%22%23ff0000%22 cx=%2240%22 cy=%2240%22 r=%2240%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2230%22 fill=%22%23fff%22 text-anchor=%22middle%22 dy=%22.3em%22%3EC%3C/text%3E%3C/svg%3E'">
+                    <div class="project-info">
+                        <h3>TeamChat</h3>
+                        <p>2500+ Servers</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <button class="music-button" id="musicButton">♫</button>
+
+    <div class="music-player" id="musicPlayer">
+        <h3>Music Player</h3>
+        <div class="now-playing" id="nowPlaying">No song playing</div>
+        
+        <div class="media-buttons">
+            <button class="media-button back-button" id="backBtn">
+                <div class="button-icon">
+                    <i class="fas fa-step-backward"></i>
+                </div>
+            </button>
+            <button class="media-button rewind-button" id="rewindBtn">
+                <div class="button-icon">
+                    <i class="fas fa-backward"></i>
+                </div>
+            </button>
+            <button class="media-button play-button" id="playBtn">
+                <div class="button-icon">
+                    <i class="fas fa-play"></i>
+                </div>
+            </button>
+            <button class="media-button forward-button" id="forwardBtn">
+                <div class="button-icon">
+                    <i class="fas fa-forward"></i>
+                </div>
+            </button>
+            <button class="media-button skip-button" id="skipBtn">
+                <div class="button-icon">
+                    <i class="fas fa-step-forward"></i>
+                </div>
+            </button>
+        </div>
+
+        <div class="progress-wrapper">
+            <div class="progress-bar-container" id="progressContainer">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="progress-time">
+                <span id="currentTime">0:00</span>
+                <span id="duration">0:00</span>
+            </div>
+        </div>
+    </div>
+
+    <audio id="audioPlayer"></audio>
+
+    <script>
+        const videoOverlay = document.getElementById('videoOverlay');
+        
+        function triggerLightning() {
+            videoOverlay.classList.add('lightning-flash');
+            setTimeout(() => {
+                videoOverlay.classList.remove('lightning-flash');
+            }, 500);
+        }
+
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                triggerLightning();
+            }
+        }, 5000);
+
+        const musicButton = document.getElementById('musicButton');
+        const musicPlayer = document.getElementById('musicPlayer');
+        const audioPlayer = document.getElementById('audioPlayer');
+        const nowPlaying = document.getElementById('nowPlaying');
+        const playBtn = document.getElementById('playBtn');
+        const backBtn = document.getElementById('backBtn');
+        const rewindBtn = document.getElementById('rewindBtn');
+        const forwardBtn = document.getElementById('forwardBtn');
+        const skipBtn = document.getElementById('skipBtn');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const currentTimeDisplay = document.getElementById('currentTime');
+        const durationDisplay = document.getElementById('duration');
+
+        const songFiles = [
+            'Chris Travis - Bring It Back.mp3',
+            'Chris Travis - H20.mp3',
+            'Xavier Wulf - Smoke (Kemuri) (Legendado).mp3'
+        ];
+
+        let songs = [];
+        let currentSongIndex = 0;
+        let isPlayerReady = false;
+        let isPlaying = false;
+
+        async function loadSongsFromDirectory() {
+            const possibleSongs = [];
+            
+            console.log('Loading songs from list...');
+
+            for (const file of songFiles) {
+                try {
+                    const path = `/songs/${file}`;
+                    const response = await fetch(path, { method: 'HEAD' });
+                    if (response.ok) {
+                        const fileName = file.replace(/\.(mp3|wav|ogg|m4a|flac)$/i, '');
+                        possibleSongs.push({ 
+                            name: fileName, 
+                            path: path,
+                            fileName: fileName
+                        });
+                        console.log('✓ Found:', fileName);
+                    } else {
+                        console.log('✗ Not found:', file);
+                    }
+                } catch (e) {
+                    console.log('✗ Error loading:', file);
+                }
+            }
+
+            console.log(`Total songs loaded: ${possibleSongs.length}`);
+            return possibleSongs;
+        }
+
+        async function initMusicPlayer() {
+            nowPlaying.textContent = 'Scanning for songs...';
+            songs = await loadSongsFromDirectory();
+            
+            if (songs.length === 0) {
+                nowPlaying.textContent = 'No songs found in /songs/';
+                console.log('No songs found in /songs/ directory');
+                return;
+            }
+            
+            console.log(`Found ${songs.length} songs:`, songs);
+            nowPlaying.textContent = `${songs.length} song(s) loaded`;
+        }
+
+        musicButton.addEventListener('click', async () => {
+            musicPlayer.classList.toggle('active');
+            if (!isPlayerReady) {
+                await initMusicPlayer();
+                if (songs.length > 0) {
+                    loadSong(currentSongIndex);
+                }
+                isPlayerReady = true;
+            }
+        });
+
+        function loadSong(index) {
+            if (songs.length === 0) return;
+            currentSongIndex = index;
+            audioPlayer.src = songs[index].path;
+            nowPlaying.textContent = songs[index].fileName;
+        }
+
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '0:00';
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        playBtn.addEventListener('click', async () => {
+            if (!isPlayerReady) {
+                await initMusicPlayer();
+                if (songs.length > 0) {
+                    loadSong(currentSongIndex);
+                }
+                isPlayerReady = true;
+            }
+            
+            if (songs.length === 0) return;
+
+            if (isPlaying) {
+                audioPlayer.pause();
+                isPlaying = false;
+                playBtn.querySelector('i').className = 'fas fa-play';
+            } else {
+                audioPlayer.play().catch(e => {
+                    console.error('Error playing audio:', e);
+                    nowPlaying.textContent = 'Error playing song';
+                });
+                isPlaying = true;
+                playBtn.querySelector('i').className = 'fas fa-pause';
+            }
+        });
+
+        backBtn.addEventListener('click', () => {
+            if (songs.length === 0) return;
+            currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+            loadSong(currentSongIndex);
+            if (isPlaying) {
+                audioPlayer.play();
+            }
+        });
+
+        rewindBtn.addEventListener('click', () => {
+            audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - 10);
+        });
+
+        forwardBtn.addEventListener('click', () => {
+            audioPlayer.currentTime = Math.min(audioPlayer.duration, audioPlayer.currentTime + 10);
+        });
+
+        skipBtn.addEventListener('click', () => {
+            if (songs.length === 0) return;
+            currentSongIndex = (currentSongIndex + 1) % songs.length;
+            loadSong(currentSongIndex);
+            if (isPlaying) {
+                audioPlayer.play();
+            }
+        });
+
+        audioPlayer.addEventListener('timeupdate', () => {
+            if (audioPlayer.duration) {
+                const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+                progressBar.style.width = progress + '%';
+                currentTimeDisplay.textContent = formatTime(audioPlayer.currentTime);
+                durationDisplay.textContent = formatTime(audioPlayer.duration);
+            }
+        });
+
+        progressContainer.addEventListener('click', (e) => {
+            if (audioPlayer.duration) {
+                const rect = progressContainer.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const width = rect.width;
+                const percentage = clickX / width;
+                audioPlayer.currentTime = percentage * audioPlayer.duration;
+            }
+        });
+
+        audioPlayer.addEventListener('ended', () => {
+            if (songs.length === 0) return;
+            currentSongIndex = (currentSongIndex + 1) % songs.length;
+            loadSong(currentSongIndex);
+            if (isPlaying) {
+                audioPlayer.play().catch(e => {
+                    console.error('Error playing audio:', e);
+                });
+            }
+        });
+
+        audioPlayer.addEventListener('play', () => {
+            isPlaying = true;
+            playBtn.querySelector('i').className = 'fas fa-pause';
+        });
+
+        audioPlayer.addEventListener('pause', () => {
+            isPlaying = false;
+            playBtn.querySelector('i').className = 'fas fa-play';
+        });
+
+        audioPlayer.addEventListener('error', (e) => {
+            console.error('Audio error:', e);
+            nowPlaying.textContent = 'Error loading song';
+            isPlaying = false;
+            playBtn.querySelector('i').className = 'fas fa-play';
+        });
+
+        audioPlayer.volume = 0.5;
+    </script>
+</body>
+</html>
